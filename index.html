@@ -13,10 +13,132 @@
 <style>
 
 /* DROPDOWN */
-.dropdown {
-  position: relative;
+.dropdown { position: relative; }
+
+/* PANEL */
+.slideout-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 350px;
+  height: 100vh;
+  background: #f5f5f7;
+  box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+  transition: 0.4s;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+}
+.slideout-panel.open { right: 0; }
+
+/* NAV */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
+#cart-toggle { position: relative; cursor: pointer; }
+
+#cart-counter {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+/* HEADER */
+.slideout-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+.slideout-header h2 {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 32px;
+}
+
+/* CONTENT */
+.slideout-content {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* FOOTER */
+.slideout-footer {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+
+.subtotal-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 15px;
+  background: #5c4033;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* EMPTY */
+#slideout-empty-msg {
+  text-align: center;
+  color: #888;
+  margin-top: 60px;
+  font-size: 16px;
+}
+
+/* CART ITEM */
+.cart-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: -5px;
+}
+
+.cart-list-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #eee;
+}
+
+.cart-list-details { flex: 1; }
+
+.cart-list-name {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.cart-list-qty-price {
+  font-size: 14px;
+  color: #777;
+}
+
+.cart-list-remove {
+  color: red;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* DROPDOWN */
 .dropdown-content {
   display: none;
   position: absolute;
@@ -27,37 +149,20 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   border-radius: 8px;
   z-index: 2000;
-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
-
 .dropdown-content a {
   display: block;
   padding: 10px;
   color: black;
   text-decoration: none;
-font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
+.dropdown:hover .dropdown-content { display: block; }
 
-.dropdown-content a:hover {
-  background: none;
-}
+.navbar { z-index: 1000; }
+.bg-video { pointer-events: none; z-index: -1; }
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* FIX NAVBAR ABOVE VIDEO */
-.navbar {
-  z-index: 1000;
-}
-
-/* FIX VIDEO CLICK ISSUE */
-.bg-video {
-  pointer-events: none;
-z-index: -1;
-}
-
-/* ✅ NEW SECTION BELOW VIDEO (ONLY ADDITION) */
 .after-video {
   background: white;
   padding: 60px 20px;
@@ -70,18 +175,14 @@ z-index: -1;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
-
   <div class="nav-left">
-    <img src="https://github.com/Navina-07/ic-bg/blob/a183b1519c22b6900e676fbb9ccc88515d5e7cad/logo2.png?raw=true" alt="Igloo Logo" class="logo">
+    <img src="https://github.com/Navina-07/ic-bg/blob/a183b1519c22b6900e676fbb9ccc88515d5e7cad/logo2.png?raw=true" class="logo">
 
-    <!-- DROPDOWN -->
     <div class="dropdown">
       <a href="fl.html">FLAVOURS</a>
       <div class="dropdown-content">
@@ -99,33 +200,122 @@ z-index: -1;
   <div class="nav-right">
     <i class="fas fa-search"></i>
     <i class="fas fa-user"></i>
-    <i class="fas fa-bag-shopping"></i>
-  </div>
 
+    <div id="cart-toggle">
+      <i class="fas fa-shopping-bag"></i>
+      <span id="cart-counter">0</span>
+    </div>
+  </div>
 </nav>
 
-<!-- MAIN SECTION -->
 <section class="main-content">
-
   <video autoplay muted loop class="bg-video">
-    <source src="https://raw.githubusercontent.com/Navina-07/ic-bg/a183b1519c22b6900e676fbb9ccc88515d5e7cad/bg3.mp4" type="video/mp4">
+    <source src="https://raw.githubusercontent.com/Navina-07/ic-bg/a183b1519c22b6900e676fbb9ccc88515d5e7cad/bg3.mp4">
   </video>
 
   <div class="center-btn">
     <a href="quiz.html" class="quiz-btn">Flavour Quiz</a>
   </div>
-
 </section>
 
-<!-- ✅ NEW CONTENT BELOW (ONLY ADDITION) -->
 <section class="after-video">
-  <h2>Our Special Flavours 🍦</h2>
-
-  <img src="flavour1.jpg" width="250">
-  <img src="flavour2.jpg" width="250">
-  <img src="flavour3.jpg" width="250">
-
+  <h2>Customer's choice</h2>
+  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour1.jpg?raw=true" width="220">
+  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour2.jpg?raw=true" width="220">
+  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour3.jpg?raw=true" width="220">
+  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour4.jpg?raw=true" width="220">
 </section>
+
+<!-- CART -->
+<div id="apple-cart-slideout" class="slideout-panel">
+  <div class="slideout-header">
+    <h2>Your Bag</h2>
+    <span id="close-cart">&times;</span>
+  </div>
+
+  <div class="slideout-content">
+    <ul id="slideout-items"></ul>
+    <div id="slideout-empty-msg">Your bag is empty.</div>
+  </div>
+
+  <div class="slideout-footer">
+    <div class="subtotal-row">
+      <span>Subtotal</span>
+      <span id="slideout-subtotal">$0.00</span>
+    </div>
+    <button class="checkout-btn">Check Out</button>
+  </div>
+</div>
+
+<script>
+let cart = [];
+
+function initCart() {
+  const savedCart = localStorage.getItem('iceCreamCart');
+  if (savedCart) {
+    cart = JSON.parse(savedCart);
+  }
+  updateCartUI();
+}
+
+function saveCart() {
+  localStorage.setItem('iceCreamCart', JSON.stringify(cart));
+}
+
+const cartPanel = document.getElementById('apple-cart-slideout');
+const cartToggle = document.getElementById('cart-toggle');
+const closeCartBtn = document.getElementById('close-cart');
+
+cartToggle.onclick = () => cartPanel.classList.add('open');
+closeCartBtn.onclick = () => cartPanel.classList.remove('open');
+
+function updateCartUI() {
+  const cartList = document.getElementById('slideout-items');
+  const counter = document.getElementById('cart-counter');
+  const subtotalText = document.getElementById('slideout-subtotal');
+  const emptyMsg = document.getElementById('slideout-empty-msg');
+
+  cartList.innerHTML = '';
+  let total = 0;
+  let count = 0;
+
+  if (cart.length === 0) {
+    emptyMsg.style.display = 'block';
+  } else {
+    emptyMsg.style.display = 'none';
+  }
+
+  cart.forEach((item, index) => {
+    total += item.price * item.quantity;
+    count += item.quantity;
+
+    let li = document.createElement('li');
+    li.className = 'cart-list-item';
+    li.innerHTML = `
+      <img src="${item.imgSrc}" class="cart-list-img">
+      <div class="cart-list-details">
+        <div class="cart-list-name">${item.flavour}</div>
+        <div class="cart-list-qty-price">
+          Qty: ${item.quantity} | $${item.price.toFixed(2)}
+        </div>
+      </div>
+      <span class="cart-list-remove" onclick="removeFromCart(${index})">Remove</span>
+    `;
+    cartList.appendChild(li);
+  });
+
+  counter.innerText = count;
+  subtotalText.innerText = '$' + total.toFixed(2);
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  saveCart();
+  updateCartUI();
+}
+
+document.addEventListener('DOMContentLoaded', initCart);
+</script>
 
 </body>
-</html>
+</html> 
