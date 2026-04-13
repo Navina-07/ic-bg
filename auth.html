@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login / Signup</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f8efd3;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  width:300px;
+  text-align:center;
+}
+
+input{
+  width:90%;
+  padding:10px;
+  margin:8px 0;
+}
+
+button{
+  padding:10px;
+  width:100%;
+  margin-top:10px;
+  background:#5c4033;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+.error{
+  color:red;
+  font-size:12px;
+}
+
+.toggle{
+  margin-top:10px;
+  cursor:pointer;
+  color:blue;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2 id="title">Login</h2>
+
+  <div id="signup-fields" style="display:none;">
+    <input type="text" id="username" placeholder="Username">
+  </div>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <div class="error" id="error-msg"></div>
+
+  <button onclick="submitForm()">Submit</button>
+
+  <div class="toggle" onclick="toggleMode()">Switch to Signup</div>
+
+</div>
+
+<script>
+
+let isSignup = false;
+
+function toggleMode(){
+  isSignup = !isSignup;
+
+  document.getElementById("signup-fields").style.display = isSignup ? "block" : "none";
+  document.getElementById("title").innerText = isSignup ? "Signup" : "Login";
+  document.querySelector(".toggle").innerText = isSignup ? "Switch to Login" : "Switch to Signup";
+  document.getElementById("error-msg").innerText = "";
+}
+
+function submitForm(){
+
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  let username = document.getElementById("username").value;
+  let error = document.getElementById("error-msg");
+
+  // EMAIL VALIDATION
+  if(!email.endsWith("@gmail.com")){
+    error.innerText = "Invalid email (must end with @gmail.com)";
+    return;
+  }
+
+  if(isSignup){
+    if(username === ""){
+      error.innerText = "Enter username";
+      return;
+    }
+
+    // SAVE USER
+    localStorage.setItem("userEmail", email);
+    localStorage.setItem("userPassword", password);
+    localStorage.setItem("username", username);
+
+    alert("Account created!");
+    window.location.href = "index.html"; // go home
+  }
+  else{
+    let savedEmail = localStorage.getItem("userEmail");
+    let savedPassword = localStorage.getItem("userPassword");
+
+    if(email === savedEmail && password === savedPassword){
+      alert("Login successful!");
+      window.location.href = "index.html";
+    }
+    else{
+      error.innerText = "Invalid email or password";
+    }
+  }
+}
+
+</script>
+
+</body>
+</html>
