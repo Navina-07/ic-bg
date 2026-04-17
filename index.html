@@ -1,297 +1,889 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth;">
+
 <head>
-<link href="https://fonts.google.com/share?selection.family=Shadows+Into+Light">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<meta charset="UTF-8">
-<title>Igloo</title>
-<link rel="stylesheet" href="style.css">
+  <link href="https://fonts.google.com/share?selection.family=Shadows+Into+Light">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Igloo</title>
+  <link rel="stylesheet" href="style.css">
 
-<!-- Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
+  <style>
+    /* DROPDOWN */
+    .dropdown {
+      position: relative;
+    }
 
-/* DROPDOWN */
-.dropdown { position: relative; }
+    /* PANEL */
+    .slideout-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+      transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* PANEL */
-.slideout-panel {
-  position: fixed;
-  top: 0;
-  right: -400px;
-  width: 350px;
-  height: 100vh;
-  background: #f5f5f7;
-  box-shadow: -4px 0 15px rgba(0,0,0,0.1);
-  transition: 0.4s;
-  z-index: 3000;
-  display: flex;
-  flex-direction: column;
-}
-.slideout-panel.open { right: 0; }
+    .slideout-panel.open {
+      right: 0;
+    }
 
-/* NAV */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+    /* NAV */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
 
-#cart-toggle { position: relative; cursor: pointer; }
+    #cart-toggle {
+      position: relative;
+      cursor: pointer;
+    }
 
-#cart-counter {
-  position: absolute;
-  top: -8px;
-  right: -10px;
-  background: red;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 12px;
-}
+    #cart-counter {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: bold;
+    }
 
-/* HEADER */
-.slideout-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-.slideout-header h2 {
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 32px;
-}
+    /* HEADER */
+    .slideout-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
 
-/* CONTENT */
-.slideout-content {
-  flex: 1;
-  padding: 25px;
-  overflow-y: auto;
-}
+    .slideout-header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
 
-/* FOOTER */
-.slideout-footer {
-  padding: 20px;
-  border-top: 1px solid #eee;
-  background: #fafafa;
-}
+    #close-cart {
+      font-size: 28px;
+      cursor: pointer;
+      color: #666;
+    }
 
-.subtotal-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
+    /* CONTENT */
+    .slideout-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
 
-.checkout-btn {
-  width: 100%;
-  padding: 15px;
-  background: #5c4033;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    #slideout-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-/* EMPTY */
-#slideout-empty-msg {
-  text-align: center;
-  color: #888;
-  margin-top: 60px;
-  font-size: 16px;
-}
+    /* FOOTER */
+    .slideout-footer {
+      padding: 20px;
+      border-top: 1px solid #eee;
+      background: #f9f9f9;
+    }
 
-/* CART ITEM */
-.cart-list-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: -5px;
-}
+    .subtotal-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
 
-.cart-list-img {
-  width: 90px;
-  height: 90px;
-  border-radius: 12px;
-  object-fit: cover;
-  background: #eee;
-}
+    .checkout-btn {
+      width: 100%;
+      padding: 15px;
+      background: #5c4033;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-.cart-list-details { flex: 1; }
+    .checkout-btn:hover {
+      background: #3e2723;
+    }
 
-.cart-list-name {
-  font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
+    /* EMPTY */
+    #slideout-empty-msg {
+      text-align: center;
+      color: #888;
+      margin-top: 20px;
+    }
 
-.cart-list-qty-price {
-  font-size: 14px;
-  color: #777;
-}
+    /* CART ITEM */
+    .cart-list-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-.cart-list-remove {
-  color: red;
-  cursor: pointer;
-  font-size: 13px;
-}
+    .cart-list-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+      background: #eee;
+    }
 
-/* DROPDOWN */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: rgba(255, 255, 255, 0.2);
-  min-width: 160px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  border-radius: 8px;
-  z-index: 2000;
-  backdrop-filter: blur(10px);
-}
-.dropdown-content a {
-  display: block;
-  padding: 10px;
-  color: black;
-  text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-}
-.dropdown:hover .dropdown-content { display: block; }
+    .cart-list-details {
+      flex: 1;
+    }
 
-.navbar { z-index: 1000; }
-.bg-video { pointer-events: none; z-index: -1; }
+    .cart-list-name {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
 
-.after-video {
-  background: white;
-  padding: 60px 20px;
-  text-align: center;
-}
+    .cart-list-qty-price {
+      font-size: 13px;
+      color: #666;
+    }
 
-.after-video img {
-  margin: 20px;
-  border-radius: 15px;
-}
+    .cart-list-remove {
+      color: #ff4d4d;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 10px;
+    }
 
-</style>
+    /* DROPDOWN */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(255, 255, 255, 0.2);
+      min-width: 160px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      z-index: 2000;
+      backdrop-filter: blur(10px);
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px;
+      color: black;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .navbar {
+      z-index: 1000;
+    }
+
+    .bg-video {
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .after-video {
+      background: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .after-video img {
+      margin: 20px;
+      border-radius: 15px;
+    }
+
+    /* HERO OVERLAY */
+    .hero-overlay {
+      position: absolute;
+      bottom: 240px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 2;
+      width: 90%;
+      max-width: 700px;
+    }
+
+    .hero-overlay h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 48px;
+      font-weight: 600;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+      margin: 0 0 10px 0;
+      line-height: 1.2;
+    }
+
+    .hero-overlay p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+      margin: 0 0 25px 0;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #5c4033;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .hero-cta:hover {
+      background: #3e2723;
+      transform: translateY(-2px);
+    }
+
+    /* FEATURED FLAVOURS */
+    .featured-section {
+      background: #fdf8f0;
+      padding: 70px 20px;
+      text-align: center;
+    }
+
+    .featured-section .section-eyebrow {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: #5c4033;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .featured-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .after-video-images {
+      margin-bottom: 30px;
+    }
+
+    .after-video-images img {
+      margin: 8px;
+      border-radius: 12px;
+    }
+
+    .featured-section .section-sub {
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 35px;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .featured-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      text-align: center;
+      padding-bottom: 18px;
+      transition: transform 0.3s;
+    }
+
+    .featured-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .featured-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .featured-card h3 {
+      font-size: 17px;
+      margin: 12px 0 4px 0;
+      color: #333;
+    }
+
+    .featured-card .feat-price {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .featured-card .feat-add-btn {
+      background: #5c4033;
+      color: white;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .featured-card .feat-add-btn:hover {
+      background: #3e2723;
+    }
+
+    /* BRAND STORY */
+    .story-section {
+      display: flex;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 80px 30px;
+      gap: 50px;
+    }
+
+    .story-img {
+      flex: 1;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .story-img img {
+      width: 100%;
+      border-radius: 16px;
+    }
+
+    .story-text {
+      flex: 1;
+    }
+
+    .story-text h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .story-text p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .story-link {
+      color: #5c4033;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .story-link:hover {
+      text-decoration: underline;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      background: #f8efd3;
+      padding: 70px 20px;
+      text-align: center;
+    }
+
+    .testimonials-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 40px;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      text-align: left;
+    }
+
+    .testimonial-card .stars {
+      color: #f5a623;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-card p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+
+    .testimonial-card .reviewer {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* NEWSLETTER */
+    .newsletter-section {
+      background: #5c4033;
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .newsletter-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .newsletter-section p {
+      font-size: 15px;
+      opacity: 0.85;
+      margin-bottom: 25px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .newsletter-form button {
+      padding: 14px 24px;
+      background: white;
+      color: #5c4033;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .newsletter-form button:hover {
+      background: #f8efd3;
+    }
+
+    /* SOCIAL / INSTAGRAM */
+    .social-section {
+      padding: 70px 20px;
+      text-align: center;
+      background: white;
+    }
+
+    .social-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .social-handle {
+      color: #5c4033;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 30px;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .social-grid img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .social-grid img:hover {
+      transform: scale(1.04);
+    }
+
+    /* SITE FOOTER */
+    .site-footer {
+      background: #1a1a1a;
+      color: #ccc;
+      padding: 50px 30px 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .footer-col h4 {
+      color: white;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .footer-col a {
+      display: block;
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 8px;
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: #f8efd3;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .footer-social a {
+      display: inline-block;
+      margin-right: 15px;
+      font-size: 20px;
+      color: #aaa;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .footer-social a:hover {
+      color: #f8efd3;
+      transform: translateY(-2px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid #333;
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero-overlay h1 {
+        font-size: 30px;
+      }
+
+      .hero-overlay p {
+        font-size: 15px;
+      }
+
+      .story-section {
+        flex-direction: column;
+        padding: 40px 20px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<nav class="navbar">
-  <div class="nav-left">
-    <img src="https://github.com/Navina-07/ic-bg/blob/a183b1519c22b6900e676fbb9ccc88515d5e7cad/logo2.png?raw=true" class="logo">
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="https://github.com/Navina-07/ic-bg/blob/a183b1519c22b6900e676fbb9ccc88515d5e7cad/logo2.png?raw=true"
+        class="logo">
 
-    <div class="dropdown">
-      <a href="fl.html">FLAVOURS</a>
-      <div class="dropdown-content">
-        <a href="fl.html?type=chocolate">Chocolate</a>
-        <a href="fl.html?type=vanilla">Vanilla</a>
-        <a href="fl.html?type=strawberry">Strawberry</a>
-        <a href="fl.html?type=mango">Mango</a>
+      <div class="dropdown">
+        <a href="fl.html">FLAVOURS</a>
+        <div class="dropdown-content">
+          <a href="fl.html?type=chocolate">Chocolate</a>
+          <a href="fl.html?type=vanilla">Vanilla</a>
+          <a href="fl.html?type=strawberry">Strawberry</a>
+          <a href="fl.html?type=mango">Mango</a>
+        </div>
+      </div>
+
+      <a href="#">PRODUCTS</a>
+      <a href="#locate">LOCATE US</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="search.html" aria-label="Search"><i class="fas fa-search"></i></a>
+      <a href="profile.html" aria-label="Profile"><i class="fas fa-user"></i></a>
+
+      <div id="cart-toggle">
+        <i class="fas fa-shopping-bag"></i>
+        <span id="cart-counter">0</span>
       </div>
     </div>
+  </nav>
 
-    <a href="#">PRODUCTS</a>
-    <a href="#">LOCATE US</a>
-  </div>
+  <section id="home" class="main-content">
+    <video autoplay muted loop class="bg-video">
+      <source src="https://raw.githubusercontent.com/Navina-07/ic-bg/a183b1519c22b6900e676fbb9ccc88515d5e7cad/bg3.mp4">
+    </video>
 
-  <div class="nav-right">
-    <i class="fas fa-search"></i>
-    <i class="fas fa-user"></i>
+    <div class="center-btn">
+      <a href="quiz.html" class="quiz-btn">Flavour Quiz</a>
+    </div>
+  </section>
 
-    <div id="cart-toggle">
-      <i class="fas fa-shopping-bag"></i>
-      <span id="cart-counter">0</span>
+  <!-- BEST SELLERS -->
+  <section id="services" class="featured-section">
+    <p class="section-eyebrow">CUSTOMER FAVOURITES</p>
+    <h2>Best Sellers</h2>
+    <div class="after-video-images">
+      <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour1.jpg?raw=true" width="180">
+      <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour2.jpg?raw=true" width="180">
+      <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour3.jpg?raw=true" width="180">
+      <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour4.jpg?raw=true" width="180">
+    </div>
+    <p class="section-sub">Our most-loved scoops — handpicked for you.</p>
+    <div class="featured-grid">
+      <div class="featured-card" data-price="6.00" data-name="Dark Chocolate Raspberry">
+        <img src="https://github.com/Navina-07/ic-bg/blob/main/c1.jpg?raw=true" alt="Dark Chocolate Raspberry">
+        <h3>Dark Chocolate Raspberry</h3>
+        <p class="feat-price">$6.00</p>
+        <button class="feat-add-btn" onclick="addFeatured(this)">Add to Bag</button>
+      </div>
+      <div class="featured-card" data-price="5.50" data-name="Madagascar Vanilla Bean">
+        <img src="https://github.com/Navina-07/ic-bg/blob/main/v1.jpg?raw=true" alt="Madagascar Vanilla Bean">
+        <h3>Madagascar Vanilla Bean</h3>
+        <p class="feat-price">$5.50</p>
+        <button class="feat-add-btn" onclick="addFeatured(this)">Add to Bag</button>
+      </div>
+      <div class="featured-card" data-price="6.50" data-name="Strawberry Cheesecake">
+        <img src="https://github.com/Navina-07/ic-bg/blob/main/s1.jpg?raw=true" alt="Strawberry Cheesecake">
+        <h3>Strawberry Cheesecake</h3>
+        <p class="feat-price">$6.50</p>
+        <button class="feat-add-btn" onclick="addFeatured(this)">Add to Bag</button>
+      </div>
+      <div class="featured-card" data-price="6.00" data-name="Mango Chili Lime">
+        <img src="https://github.com/Navina-07/ic-bg/blob/main/m1.jpg?raw=true" alt="Mango Chili Lime">
+        <h3>Mango Chili Lime</h3>
+        <p class="feat-price">$6.00</p>
+        <button class="feat-add-btn" onclick="addFeatured(this)">Add to Bag</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND STORY -->
+  <section id="about" style="background: white;">
+    <div class="story-section">
+      <div class="story-img">
+        <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour2.jpg?raw=true" alt="Our Story">
+      </div>
+      <div class="story-text">
+        <h2>The Scoop Behind Igloo</h2>
+        <p>Born in a tiny kitchen with a dream of making ice cream that tastes like a warm hug, Igloo is where
+          old-school craftsmanship meets bold new flavours.</p>
+        <p>Every small batch is churned from scratch using locally sourced ingredients — zero artificial colours, zero
+          shortcuts. Just real ingredients, real people, and a whole lot of love.</p>
+        <a href="story.html" class="story-link">Read Our Full Story &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="testimonials-section">
+    <h2>What Our Fans Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"The Dark Chocolate Raspberry is absolutely unreal. Rich, creamy, and the raspberry swirl is perfection. I've
+          ordered 3 times already!"</p>
+        <div class="reviewer">— Sarah K.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Best mango ice cream I've ever tasted. The chili lime kick was unexpected and SO good. My whole family is
+          obsessed."</p>
+        <div class="reviewer">— Raj P.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Igloo's vanilla is on another level — you can actually taste the real vanilla bean. It's silky smooth and
+          not too sweet. Just perfect."</p>
+        <div class="reviewer">— Emily T.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter" class="newsletter-section">
+    <h2>Get 10% Off Your First Order</h2>
+    <p>Join the Igloo family and be the first to know about new flavours, seasonal drops, and exclusive offers.</p>
+    <div class="newsletter-form">
+      <input type="email" id="newsletter-email" placeholder="Enter your email address">
+      <button onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+  </section>
+
+  <!-- LOCATE US -->
+  <section id="locate" style="background: #fdf8f0; padding: 70px 20px; text-align: center;">
+    <h2 style="font-family: 'Poppins', sans-serif; font-size: 32px; color: #333; margin-bottom: 10px;">Locate Us</h2>
+    <p style="font-size: 16px; color: #888; margin-bottom: 30px;">Come visit us — we'd love to scoop something special for you!</p>
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 30px; align-items: center; justify-content: center;">
+      <div style="flex: 1; min-width: 280px;">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3884.517223095498!2d79.9908!3d13.2283!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDEzJzQxLjkiTiA3OcKwNTknMjcuMCJF!5e0!3m2!1sen!2sin!4v1"
+          width="100%" height="300" style="border: 0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <div style="flex: 1; min-width: 280px; text-align: left;">
+        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+          <h3 style="font-family: 'Poppins', sans-serif; font-size: 20px; color: #5c4033; margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>Our Address</h3>
+          <p style="font-size: 15px; color: #555; line-height: 1.7; margin: 0;">Amrita Vishwa Vidyapeetham, Chennai,<br>337/1 A, Vallal RCK Nagar,<br>SH 50A, Vengal,<br>Tamil Nadu 601102</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SITE FOOTER -->
+  <footer id="footer" class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="#home">Home</a>
+        <a href="fl.html">All Flavours</a>
+        <a href="#services">Services</a>
+        <a href="quiz.html">Flavour Quiz</a>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="#about">About Igloo</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="auth.html">Login / Signup</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@igloo-icecream.com">hello@igloo-icecream.com</a>
+        <a href="tel:+11234567890">+1 (123) 456-7890</a>
+        <a href="#about">Our Ingredients</a>
+        <a href="#about">Careers</a>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Igloo Artisanal Ice Cream. All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- CART -->
+  <div id="apple-cart-slideout" class="slideout-panel">
+    <div class="slideout-header">
+      <h2>Your Bag</h2>
+      <span id="close-cart">&times;</span>
+    </div>
+
+    <div class="slideout-content">
+      <ul id="slideout-items"></ul>
+      <div id="slideout-empty-msg">Your bag is empty.</div>
+    </div>
+
+    <div class="slideout-footer">
+      <div class="subtotal-row">
+        <span>Subtotal</span>
+        <span id="slideout-subtotal">$0.00</span>
+      </div>
+      <button class="checkout-btn">Check Out</button>
     </div>
   </div>
-</nav>
 
-<section class="main-content">
-  <video autoplay muted loop class="bg-video">
-    <source src="https://raw.githubusercontent.com/Navina-07/ic-bg/a183b1519c22b6900e676fbb9ccc88515d5e7cad/bg3.mp4">
-  </video>
+  <script>
+    let cart = [];
 
-  <div class="center-btn">
-    <a href="quiz.html" class="quiz-btn">Flavour Quiz</a>
-  </div>
-</section>
+    function initCart() {
+      const savedCart = localStorage.getItem('iceCreamCart');
+      if (savedCart) {
+        cart = JSON.parse(savedCart);
+      }
+      updateCartUI();
+    }
 
-<section class="after-video">
-  <h2>Customer's choice</h2>
-  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour1.jpg?raw=true" width="220">
-  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour2.jpg?raw=true" width="220">
-  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour3.jpg?raw=true" width="220">
-  <img src="https://github.com/Navina-07/ic-bg/blob/main/flavour4.jpg?raw=true" width="220">
-</section>
+    function saveCart() {
+      localStorage.setItem('iceCreamCart', JSON.stringify(cart));
+    }
 
-<!-- CART -->
-<div id="apple-cart-slideout" class="slideout-panel">
-  <div class="slideout-header">
-    <h2>Your Bag</h2>
-    <span id="close-cart">&times;</span>
-  </div>
+    const cartPanel = document.getElementById('apple-cart-slideout');
+    const cartToggle = document.getElementById('cart-toggle');
+    const closeCartBtn = document.getElementById('close-cart');
 
-  <div class="slideout-content">
-    <ul id="slideout-items"></ul>
-    <div id="slideout-empty-msg">Your bag is empty.</div>
-  </div>
+    cartToggle.onclick = () => cartPanel.classList.add('open');
+    closeCartBtn.onclick = () => cartPanel.classList.remove('open');
 
-  <div class="slideout-footer">
-    <div class="subtotal-row">
-      <span>Subtotal</span>
-      <span id="slideout-subtotal">$0.00</span>
-    </div>
-    <button class="checkout-btn">Check Out</button>
-  </div>
-</div>
+    function updateCartUI() {
+      const cartList = document.getElementById('slideout-items');
+      const counter = document.getElementById('cart-counter');
+      const subtotalText = document.getElementById('slideout-subtotal');
+      const emptyMsg = document.getElementById('slideout-empty-msg');
 
-<script>
-let cart = [];
+      cartList.innerHTML = '';
+      let total = 0;
+      let count = 0;
 
-function initCart() {
-  const savedCart = localStorage.getItem('iceCreamCart');
-  if (savedCart) {
-    cart = JSON.parse(savedCart);
-  }
-  updateCartUI();
-}
+      if (cart.length === 0) {
+        emptyMsg.style.display = 'block';
+      } else {
+        emptyMsg.style.display = 'none';
+      }
 
-function saveCart() {
-  localStorage.setItem('iceCreamCart', JSON.stringify(cart));
-}
+      cart.forEach((item, index) => {
+        total += item.price * item.quantity;
+        count += item.quantity;
 
-const cartPanel = document.getElementById('apple-cart-slideout');
-const cartToggle = document.getElementById('cart-toggle');
-const closeCartBtn = document.getElementById('close-cart');
-
-cartToggle.onclick = () => cartPanel.classList.add('open');
-closeCartBtn.onclick = () => cartPanel.classList.remove('open');
-
-function updateCartUI() {
-  const cartList = document.getElementById('slideout-items');
-  const counter = document.getElementById('cart-counter');
-  const subtotalText = document.getElementById('slideout-subtotal');
-  const emptyMsg = document.getElementById('slideout-empty-msg');
-
-  cartList.innerHTML = '';
-  let total = 0;
-  let count = 0;
-
-  if (cart.length === 0) {
-    emptyMsg.style.display = 'block';
-  } else {
-    emptyMsg.style.display = 'none';
-  }
-
-  cart.forEach((item, index) => {
-    total += item.price * item.quantity;
-    count += item.quantity;
-
-    let li = document.createElement('li');
-    li.className = 'cart-list-item';
-    li.innerHTML = `
+        let li = document.createElement('li');
+        li.className = 'cart-list-item';
+        li.innerHTML = `
       <img src="${item.imgSrc}" class="cart-list-img">
       <div class="cart-list-details">
         <div class="cart-list-name">${item.flavour}</div>
@@ -301,21 +893,59 @@ function updateCartUI() {
       </div>
       <span class="cart-list-remove" onclick="removeFromCart(${index})">Remove</span>
     `;
-    cartList.appendChild(li);
-  });
+        cartList.appendChild(li);
+      });
 
-  counter.innerText = count;
-  subtotalText.innerText = '$' + total.toFixed(2);
-}
+      counter.innerText = count;
+      subtotalText.innerText = '$' + total.toFixed(2);
+    }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveCart();
-  updateCartUI();
-}
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      saveCart();
+      updateCartUI();
+    }
 
-document.addEventListener('DOMContentLoaded', initCart);
-</script>
+    // Add Featured item to cart from homepage
+    function addFeatured(btn) {
+      let card = btn.closest('.featured-card');
+      let name = card.getAttribute('data-name');
+      let price = parseFloat(card.getAttribute('data-price'));
+      let imgSrc = card.querySelector('img').src;
+
+      let existing = cart.find(item => item.flavour === name);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ flavour: name, quantity: 1, price: price, imgSrc: imgSrc });
+      }
+
+      saveCart();
+      updateCartUI();
+      cartPanel.classList.add('open');
+
+      btn.style.backgroundColor = '#4CAF50';
+      btn.innerText = 'Added!';
+      setTimeout(() => {
+        btn.style.backgroundColor = '';
+        btn.innerText = 'Add to Bag';
+      }, 1000);
+    }
+
+    // Newsletter
+    function subscribeNewsletter() {
+      let email = document.getElementById('newsletter-email').value;
+      if (email && email.includes('@')) {
+        alert('Thanks for subscribing! Check your inbox for 10% off.');
+        document.getElementById('newsletter-email').value = '';
+      } else {
+        alert('Please enter a valid email address.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCart);
+  </script>
 
 </body>
-</html> 
+
+</html>
