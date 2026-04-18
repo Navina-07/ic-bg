@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — Igloo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: #faf7f2; color: #333; }
+
+    .navbar { background: #f8efd3; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    .nav-left { display: flex; align-items: center; gap: 20px; }
+    .nav-left .logo { height: 55px; }
+    .nav-left a { text-decoration: none; color: #333; font-weight: 600; font-size: 13px; letter-spacing: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+    .nav-right a { color: #333; text-decoration: none; }
+    .nav-right i { font-size: 18px; cursor: pointer; }
+
+    .profile-section { max-width: 500px; margin: 60px auto; padding: 0 20px; }
+
+    .profile-card {
+      background: white; border-radius: 14px; padding: 30px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07); text-align: center;
+    }
+
+    .avatar {
+      width: 90px; height: 90px; border-radius: 50%; background: #f8efd3;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; color: #5c4033; margin: 0 auto 16px;
+    }
+
+    .profile-card h1 { font-size: 24px; margin-bottom: 4px; }
+    .profile-card .email { font-size: 14px; color: #888; margin-bottom: 20px; }
+
+    .login-form {
+      background: white; border-radius: 14px; padding: 30px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    .login-form h2 { margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label { font-size: 13px; font-weight: 600; }
+    .form-group input {
+      width: 100%; padding: 12px; border: 2px solid #e0d8ce;
+      border-radius: 8px; margin-top: 5px;
+    }
+
+    .btn-login, .btn-logout {
+      width: 100%; padding: 12px; background: #5c4033;
+      color: white; border: none; border-radius: 8px;
+      font-weight: 600; cursor: pointer;
+    }
+
+    .btn-login:hover, .btn-logout:hover { background: #3e2723; }
+
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html"><img src="https://github.com/Navina-07/ic-bg/blob/main/logo2.png?raw=true" class="logo"></a>
+      <a href="fl.html">FLAVOURS</a>
+      <a href="search.html">SEARCH</a>
+      <a href="#">LOCATE US</a>
+    </div>
+    <div class="nav-right">
+      <a href="search.html"><i class="fas fa-search"></i></a>
+      <a href="profile.html"><i class="fas fa-user"></i></a>
+      <a href="fl.html"><i class="fas fa-shopping-bag"></i></a>
+    </div>
+  </nav>
+
+  <div class="profile-section">
+
+    <!-- LOGIN FORM -->
+    <div class="login-form" id="login-form">
+      <h2>Login</h2>
+
+      <div class="error" id="error-box"></div>
+
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="name">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email">
+      </div>
+
+      <button class="btn-login" id="login-btn">Login</button>
+    </div>
+
+    <!-- PROFILE VIEW -->
+    <div class="profile-card" id="profile-card" style="display:none;">
+      <div class="avatar" id="avatar"></div>
+      <h1 id="display-name"></h1>
+      <p class="email" id="display-email"></p>
+
+      <!-- ✅ LOGOUT BUTTON ADDED -->
+      <button class="btn-logout" id="logout-btn">Logout</button>
+    </div>
+
+  </div>
+
+  <script>
+    function render() {
+      let username = localStorage.getItem('username');
+      let email = localStorage.getItem('userEmail');
+
+      if (username && email) {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('profile-card').style.display = 'block';
+
+        document.getElementById('display-name').textContent = username;
+        document.getElementById('display-email').textContent = email;
+        document.getElementById('avatar').textContent = username.charAt(0).toUpperCase();
+      } else {
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('profile-card').style.display = 'none';
+      }
+    }
+
+    document.getElementById('login-btn').addEventListener('click', () => {
+      let name = document.getElementById('name').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let errorBox = document.getElementById('error-box');
+
+      errorBox.innerText = "";
+      let errors = [];
+
+      let namePattern = /^[A-Za-z]+$/;
+      if (!name || !namePattern.test(name)) {
+        errors.push("Invalid name (only letters allowed)");
+      }
+
+      if (!email.endsWith("@gmail.com")) {
+        errors.push("Invalid email (must end with @gmail.com)");
+      }
+
+      if (errors.length > 0) {
+        errorBox.innerText = errors.join("\n");
+        return;
+      }
+
+      localStorage.setItem('username', name);
+      localStorage.setItem('userEmail', email);
+
+      render();
+    });
+
+    // ✅ LOGOUT FUNCTION
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('username');
+      localStorage.removeItem('userEmail');
+
+      render();
+    });
+
+    render();
+  </script>
+
+</body>
+</html>
