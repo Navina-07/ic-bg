@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+
+<head>
+  <link href="https://fonts.google.com/share?selection.family=Shadows+Into+Light">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story — Igloo</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* DROPDOWN */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(255, 255, 255, 0.2);
+      min-width: 160px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      z-index: 2000;
+      backdrop-filter: blur(10px);
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px;
+      color: black;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .navbar {
+      z-index: 1000;
+      background: #fdf8f0 !important;
+    }
+
+    /* NAV */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* STORY HERO */
+    .story-hero {
+      position: relative;
+      height: 60vh;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #5c4033 0%, #3e2723 50%, #1a1a1a 100%);
+    }
+
+    .story-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(to top, #fdf8f0, transparent);
+    }
+
+    .story-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 0 20px;
+    }
+
+    .story-hero-content h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: white;
+      margin: 0 0 15px 0;
+      line-height: 1.15;
+    }
+
+    .story-hero-content p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* SECTIONS */
+    .story-page-section {
+      padding: 80px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .story-page-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .story-page-section p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    /* ORIGIN BLOCK */
+    .origin-block {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .origin-block .origin-img {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .origin-block .origin-img img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .origin-block .origin-text {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    /* VALUES */
+    .values-section {
+      background: #f8efd3;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .values-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 40px;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .value-card {
+      background: white;
+      border-radius: 16px;
+      padding: 35px 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s;
+    }
+
+    .value-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .value-card i {
+      font-size: 36px;
+      color: #5c4033;
+      margin-bottom: 18px;
+    }
+
+    .value-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .value-card p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* INGREDIENTS */
+    .ingredients-section {
+      background: white;
+      padding: 80px 20px;
+    }
+
+    .ingredients-block {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      max-width: 900px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .ingredients-block .ing-text {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .ingredients-block .ing-text h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .ingredients-block .ing-text p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .ingredients-block .ing-img {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .ingredients-block .ing-img img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .ing-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0 0;
+    }
+
+    .ing-list li {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      color: #555;
+      padding: 6px 0;
+    }
+
+    .ing-list li i {
+      color: #5c4033;
+      margin-right: 10px;
+    }
+
+    /* CTA */
+    .story-cta-section {
+      background: #5c4033;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .story-cta-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .story-cta-section p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 25px;
+    }
+
+    .story-cta-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: white;
+      color: #5c4033;
+      text-decoration: none;
+      border-radius: 30px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .story-cta-btn:hover {
+      background: #f8efd3;
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    .site-footer {
+      background: #1a1a1a;
+      color: #ccc;
+      padding: 50px 30px 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .footer-col h4 {
+      color: white;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .footer-col a {
+      display: block;
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 8px;
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: #f8efd3;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid #333;
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .story-hero-content h1 {
+        font-size: 32px;
+      }
+
+      .story-hero-content p {
+        font-size: 15px;
+      }
+
+      .origin-block,
+      .ingredients-block {
+        flex-direction: column;
+      }
+
+      .story-page-section {
+        padding: 50px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="https://github.com/Navina-07/ic-bg/blob/a183b1519c22b6900e676fbb9ccc88515d5e7cad/logo2.png?raw=true"
+          class="logo">
+      </a>
+
+      <div class="dropdown">
+        <a href="fl.html">FLAVOURS</a>
+        <div class="dropdown-content">
+          <a href="fl.html?type=chocolate">Chocolate</a>
+          <a href="fl.html?type=vanilla">Vanilla</a>
+          <a href="fl.html?type=strawberry">Strawberry</a>
+          <a href="fl.html?type=mango">Mango</a>
+        </div>
+      </div>
+
+    <a href="index.html#locate">LOCATE US</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="search.html" aria-label="Search"><i class="fas fa-search"></i></a>
+      <a href="profile.html" aria-label="Profile"><i class="fas fa-user"></i></a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="story-hero">
+    <div class="story-hero-content">
+      <h1>Our Story</h1>
+      <p>From a tiny kitchen to your favourite scoop — every batch is made with heart, soul, and the finest ingredients on earth.</p>
+    </div>
+  </section>
+
+  <!-- ORIGIN -->
+  <section style="background: #fdf8f0;">
+    <div class="story-page-section">
+      <div class="origin-block">
+        <div class="origin-img">
+          <img src="i1.jpg" alt="Igloo Origins">
+        </div>
+        <div class="origin-text">
+          <h2>Where It All Began</h2>
+          <p>Igloo was born in 2018, inside a cramped kitchen with a second-hand ice cream maker and a wild dream: to create ice cream that tastes like a warm hug on a summer day.</p>
+          <p>What started as weekend experiments for friends and family quickly turned into a local sensation. Word spread — not through ads, but through genuine love for every single scoop.</p>
+          <p>Today, Igloo serves thousands of happy customers, but we've never lost that small-batch spirit. Every flavour is still developed by hand, tested obsessively, and made with the same passion as day one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values-section">
+    <h2>What We Stand For</h2>
+    <div class="values-grid">
+      <div class="value-card">
+        <i class="fas fa-leaf"></i>
+        <h3>All Natural</h3>
+        <p>Zero artificial colours, zero preservatives. Just real, honest ingredients you can taste in every bite.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-hand-holding-heart"></i>
+        <h3>Made With Love</h3>
+        <p>Every batch is small-batch churned by people who genuinely care about what ends up in your bowl.</p>
+      </div>
+      <div class="value-card">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>Locally Sourced</h3>
+        <p>We partner with local farms and suppliers to bring you the freshest dairy, fruits, and flavours.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INGREDIENTS -->
+  <section class="ingredients-section">
+    <div class="ingredients-block">
+      <div class="ing-text">
+        <h2>Our Ingredients Promise</h2>
+        <p>We believe that extraordinary ice cream starts with extraordinary ingredients. That's why we're obsessive about sourcing only the best:</p>
+        <ul class="ing-list">
+          <li><i class="fas fa-check-circle"></i> Farm-fresh whole milk & cream from local dairies</li>
+          <li><i class="fas fa-check-circle"></i> Real Madagascar vanilla beans — never extract</li>
+          <li><i class="fas fa-check-circle"></i> Single-origin Belgian chocolate</li>
+          <li><i class="fas fa-check-circle"></i> Seasonal fruits picked at peak ripeness</li>
+          <li><i class="fas fa-check-circle"></i> Organic cane sugar — no corn syrup, ever</li>
+        </ul>
+      </div>
+      <div class="ing-img">
+        <img src="i3.jpg" alt="Fresh Ingredients">
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="story-cta-section">
+    <h2>Ready to Taste the Difference?</h2>
+    <p>Explore our handcrafted flavours and find your new favourite scoop.</p>
+    <a href="fl.html" class="story-cta-btn">Explore Flavours</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="index.html#home">Home</a>
+        <a href="fl.html">All Flavours</a>
+        <a href="index.html#services">Services</a>
+        <a href="quiz.html">Flavour Quiz</a>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="index.html#about">About Igloo</a>
+        <a href="index.html#testimonials">Testimonials</a>
+        <a href="index.html#newsletter">Newsletter</a>
+        <a href="auth.html">Login / Signup</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@igloo-icecream.com">hello@igloo-icecream.com</a>
+        <a href="tel:+11234567890">+1 (123) 456-7890</a>
+        <a href="index.html#about">Our Ingredients</a>
+        <a href="index.html#about">Careers</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Igloo Artisanal Ice Cream. All Rights Reserved.
+    </div>
+  </footer>
+
+</body>
+
+</html>
